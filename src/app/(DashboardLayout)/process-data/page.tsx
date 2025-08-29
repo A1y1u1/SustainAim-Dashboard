@@ -1,12 +1,9 @@
 "use client";
+import Image from 'next/image';
 import React, { useState } from 'react';
 import Electricity from './components/Electricity';
 
-interface BasicTableOneProps {
-  className?: string;
-}
-
-const BasicTableOne: React.FC<BasicTableOneProps> = ({ className = "" }) => {
+const BasicTableOne: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('all');
 
   const handleTabClick = (tabName: string) => {
@@ -37,26 +34,26 @@ const BasicTableOne: React.FC<BasicTableOneProps> = ({ className = "" }) => {
   };
 
   return (
-    <div className={`w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg ${className}`}>
+    <div className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg">
       {/* Header */}
       <header className="flex items-center justify-between p-6" style={{ borderBottomColor: "#2c7873" }}>
         <div className="flex items-center space-x-4">
-          <img 
+          <Image
             alt="Company logo, square with text 'Logo' placeholder" 
             className="w-12 h-12 object-contain rounded-lg border border-gray-200 dark:border-gray-600 transition-transform hover:scale-105" 
-            height="48" 
+            height={48}
             src="https://storage.googleapis.com/a1aa/image/ba27555c-cef3-4940-540a-d8814276f2f8.jpg" 
-            width="48"
+            width={48}
           />
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">Processed Data</h2>
         </div>
         <div className="flex items-center space-x-4">
-          <img 
+          <Image
             alt="User profile logo, circular placeholder with text 'User'" 
             className="w-12 h-12 rounded-full object-cover border-2 border-[#2c7873] transition-transform hover:scale-105" 
-            height="48" 
+            height={48}
             src="https://storage.googleapis.com/a1aa/image/766fb262-57f9-4a4a-2fbf-f5aa194ba043.jpg" 
-            width="48"
+            width={48}
           />
         </div>
       </header>
