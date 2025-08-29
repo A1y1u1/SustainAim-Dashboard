@@ -38,6 +38,11 @@ const Waste: React.FC<WasteProps> = ({
     },
   ];
 
+  const primaryWasteType =
+    wasteData.length > 0
+      ? wasteData.reduce((max, item) => (item.value > max.value ? item : max)).type
+      : "N/A";
+
   // Chart configuration for hollow semi-circle
   const chartOptions: ApexOptions = {
     chart: {
@@ -48,7 +53,6 @@ const Waste: React.FC<WasteProps> = ({
       },
       animations: {
         enabled: true,
-        easing: "easeinout",
         speed: 800,
       },
     },
@@ -173,7 +177,6 @@ const Waste: React.FC<WasteProps> = ({
       style={{ 
         height: typeof height === 'number' ? `${height}px` : height,
         width: width,
-        minHeight: '485px'
       }}
     >
       {/* Header */}
@@ -203,8 +206,8 @@ const Waste: React.FC<WasteProps> = ({
       <div className="mt-auto">
         {/* Legend */}
         <div className=" space-y-1">
-          {wasteData.map((item, index) => (
-            <div key={index} className="flex items-center justify-between">
+          {wasteData.map((item) => (
+            <div key={item.type} className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div
                   className="h-3 w-3 rounded-full"
@@ -230,7 +233,7 @@ const Waste: React.FC<WasteProps> = ({
               Primary Type
             </p>
             <p className="text-sm font-semibold text-gray-900 dark:text-white">
-              Solid Waste
+              {primaryWasteType}
             </p>
           </div>
           <div className="text-center">
