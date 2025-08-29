@@ -2,8 +2,8 @@
 import PageContainer from '@/app/(DashboardLayout)/components/container/PageContainer';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
 import { Divider, Link, Typography } from '@mui/material';
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 const Icons = () => {
   return (
