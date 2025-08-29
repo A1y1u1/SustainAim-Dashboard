@@ -1,0 +1,544 @@
+"use client";
+
+import Link from 'next/link';
+import { FormEvent, useState } from 'react';
+
+/**
+ * A purely presentational component for the decorative forest animation.
+ * This helps keep the main login page component clean.
+ */
+const ForestAnimation = () => (
+    <div className="forest-container">
+        <div className="tree tree-1">
+            <div className="branches">
+                <div className="branch"></div>
+                <div className="branch"></div>
+                <div className="branch"></div>
+                <div className="branch"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="falling-leaf"></div>
+                <div className="falling-leaf"></div>
+                <div className="flower"></div>
+                <div className="flower"></div>
+                <div className="flower"></div>
+                <div className="flower"></div>
+                <div className="sparkle"></div>
+                <div className="sparkle"></div>
+            </div>
+        </div>
+        <div className="tree tree-2">
+            <div className="branches">
+                <div className="branch"></div>
+                <div className="branch"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="falling-leaf"></div>
+                <div className="flower"></div>
+                <div className="flower"></div>
+                <div className="flower"></div>
+                <div className="sparkle"></div>
+            </div>
+        </div>
+        <div className="tree tree-3">
+            <div className="branches">
+                <div className="branch"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="leaves"></div>
+                <div className="falling-leaf"></div>
+                <div className="flower"></div>
+                <div className="flower"></div>
+            </div>
+        </div>
+        <div className="ground-leaf"></div>
+        <div className="ground-leaf"></div>
+        <div className="ground-leaf"></div>
+    </div>
+);
+
+/**
+ * A component containing the login form and its logic.
+ * This separation of concerns makes the code more modular and easier to maintain.
+ */
+const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+
+    const validateEmail = (value: string): boolean => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phonePattern = /^(?:\+?1[-. ]?)?(?:\(\d{3}\)|\d{3})[-. ]?\d{3}[-. ]?\d{4}$/;
+        const trimmedValue = value.trim();
+        
+        if (!emailPattern.test(trimmedValue) && !phonePattern.test(trimmedValue)) {
+            setEmailError('Please enter a valid email or phone number');
+            return false;
+        }
+        
+        setEmailError('');
+        return true;
+    };
+
+    const validatePassword = (value: string): boolean => {
+        const passwordPattern = /^(?=.*\d).{8,}$/; // At least 8 chars with a number
+        if (!passwordPattern.test(value)) {
+            setPasswordError('Password must be at least 8 characters long and include a number');
+            return false;
+        }
+        setPasswordError('');
+        return true;
+    };
+
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const isEmailValid = validateEmail(email);
+        const isPasswordValid = validatePassword(password);
+
+        if (isEmailValid && isPasswordValid) {
+            console.log('Form is valid, submitting...');
+            // Here you would typically handle the form submission, e.g., API call
+            // For example: (event.target as HTMLFormElement).submit();
+        }
+    };
+
+    return (
+        <div className="register-container">
+            <h2>Welcome Back <br />To<br />Sustain Aim</h2>
+            <form id="registerForm" onSubmit={handleSubmit} method="get" noValidate>
+                <div className="form-group">
+                    <label htmlFor="email">Email or Mobile Phone Number</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            validateEmail(e.target.value);
+                        }}
+                        aria-invalid={!!emailError}
+                        aria-describedby="email-error"
+                    />
+                    <div id="email-error" className="error" role="alert" aria-live="polite">{emailError}</div>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            validatePassword(e.target.value);
+                        }}
+                        aria-invalid={!!passwordError}
+                        aria-describedby="password-error"
+                    />
+                    <div id="password-error" className="error" role="alert" aria-live="polite">{passwordError}</div>
+                </div>
+                <button type="submit">Sign In</button>
+            </form>
+            <div className="auth-links">
+                <Link href="/authentication/forgot-password">Forgot Password?</Link>
+                <Link href="/authentication/register">Sign Up</Link>
+            </div>
+        </div>
+    );
+};
+
+/**
+ * The main login page component. It composes the layout, animation, and form.
+ */
+const LoginPage = () => {
+    return (
+        <>
+            <style jsx global>{`
+                body {
+                    font-family: 'Arial', sans-serif;
+                    background: linear-gradient(135deg, #d9e8f5, #e8f0f5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    margin: 0;
+                    overflow-x: hidden;
+                }
+                .container {
+                    display: flex;
+                    align-items: center;
+                    gap: 40px;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    padding: 20px;
+                    position: relative;
+                }
+                .register-container {
+                    width: 380px;
+                    max-width: 100%;
+                    padding: 35px;
+                    background: linear-gradient(145deg, #ffffff, #f5f9ff);
+                    border-radius: 20px;
+                    box-shadow: 0 15px 40px rgba(0, 80, 40, 0.15);
+                    animation: bounceIn 1s ease;
+                    position: relative;
+                    border: 1px solid rgba(40, 167, 69, 0.1);
+                    z-index: 2;
+                }
+                /* Enhanced Forest with More Flowers */
+                .forest-container {
+                    width: 400px;
+                    height: 500px;
+                    position: relative;
+                    overflow: hidden;
+                    background: radial-gradient(circle at bottom, rgba(255, 255, 255, 0.3), transparent 70%);
+                }
+                .tree {
+                    position: absolute;
+                    bottom: 0;
+                    background: linear-gradient(to top, #2E1A10 30%, #4A2E20 70%, #6B4E31);
+                    border-radius: 20px 20px 0 0;
+                    box-shadow: inset 5px 0 15px rgba(0,0,0,0.4), 0 5px 20px rgba(0,0,0,0.2);
+                }
+                .tree-1 { width: 35px; height: 320px; left: 50%; transform: translateX(-50%); animation: swayTrunk 5s ease-in-out infinite; }
+                .tree-2 { width: 25px; height: 260px; left: 20%; transform: translateX(-50%); animation: swayTrunk 6s ease-in-out infinite; }
+                .tree-3 { width: 20px; height: 200px; left: 80%; transform: translateX(-50%); animation: swayTrunk 5.5s ease-in-out infinite; }
+                .branches {
+                    position: absolute;
+                    top: 40px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+                .tree-1 .branches { width: 180px; height: 240px; }
+                .tree-2 .branches { width: 140px; height: 200px; }
+                .tree-3 .branches { width: 100px; height: 160px; }
+                .branch {
+                    position: absolute;
+                    background: linear-gradient(to top, #4A2E20, #6B4E31);
+                    transform-origin: bottom center;
+                    border-radius: 3px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+                }
+                .tree-1 .branch:nth-child(1) { width: 6px; height: 80px; bottom: 140px; left: 25%; transform: rotate(-55deg); animation: swayBranch 4s ease-in-out infinite; }
+                .tree-1 .branch:nth-child(2) { width: 6px; height: 70px; bottom: 160px; left: 75%; transform: rotate(55deg); animation: swayBranch 4.5s ease-in-out infinite; }
+                .tree-1 .branch:nth-child(3) { width: 5px; height: 60px; bottom: 100px; left: 40%; transform: rotate(-35deg); animation: swayBranch 5s ease-in-out infinite; }
+                .tree-1 .branch:nth-child(4) { width: 5px; height: 50px; bottom: 120px; left: 60%; transform: rotate(35deg); animation: swayBranch 4.2s ease-in-out infinite; }
+                .tree-2 .branch:nth-child(1) { width: 5px; height: 60px; bottom: 120px; left: 30%; transform: rotate(-50deg); animation: swayBranch 4.8s ease-in-out infinite; }
+                .tree-2 .branch:nth-child(2) { width: 5px; height: 50px; bottom: 130px; left: 70%; transform: rotate(50deg); animation: swayBranch 5.2s ease-in-out infinite; }
+                .tree-3 .branch:nth-child(1) { width: 4px; height: 50px; bottom: 90px; left: 35%; transform: rotate(-45deg); animation: swayBranch 4.6s ease-in-out infinite; }
+                .leaves {
+                    position: absolute;
+                    background: radial-gradient(circle, #004445 15%, #2c7873 45%, transparent 70%);
+                    border-radius: 60% 20% 60% 20%;
+                    animation: swayLeaves 3s ease-in-out infinite;
+                    box-shadow: 0 3px 10px rgba(0, 80, 0, 0.3);
+                    transition: transform 0.3s ease;
+                }
+                .leaves:hover { transform: scale(1.05); }
+                .tree-1 .leaves:nth-child(1) { width: 100px; height: 100px; top: -40px; left: 5%; }
+                .tree-1 .leaves:nth-child(2) { width: 90px; height: 90px; top: -50px; left: 60%; }
+                .tree-1 .leaves:nth-child(3) { width: 80px; height: 80px; top: 10px; left: 35%; }
+                .tree-1 .leaves:nth-child(4) { width: 70px; height: 70px; top: 20px; left: 70%; }
+                .tree-1 .leaves:nth-child(5) { width: 120px; height: 95px; top: -30px; left: 20%; }
+                .tree-1 .leaves:nth-child(6) { width: 100px; height: 115px; top: -80px; left: 45%; }
+                .tree-1 .leaves:nth-child(7) { width: 100px; height: 100px; top: -60px; left: -1%; }
+                .tree-2 .leaves:nth-child(1) { width: 80px; height: 80px; top: -30px; left: 15%; }
+                .tree-2 .leaves:nth-child(2) { width: 70px; height: 70px; top: -40px; left: 65%; }
+                .tree-2 .leaves:nth-child(3) { width: 125px; height: 100px; top: -50px; left: 10%; }
+                .tree-2 .leaves:nth-child(4) { width: 85px; height: 85px; top: -80px; left: 5%; }
+                .tree-2 .leaves:nth-child(5) { width: 80px; height: 80px; top: -1px; left: 40%; }
+                .tree-3 .leaves:nth-child(1) { width: 60px; height: 60px; top: -20px; left: 25%; }
+                .tree-3 .leaves:nth-child(2) { width: 55px; height: 55px; top: 0px; left: 60%; }
+                .tree-3 .leaves:nth-child(3) { width: 50px; height: 50px; top: -30px; left: 40%; }
+                .tree-3 .leaves:nth-child(4) { width: 45px; height: 45px; top: -10px; left: 15%; }
+                .falling-leaf {
+                    position: absolute;
+                    width: 14px;
+                    height: 14px;
+                    background: linear-gradient(45deg, #004445, #2c7873);
+                    border-radius: 50% 20%;
+                    opacity: 0.9;
+                    animation: fall 6s linear infinite;
+                    box-shadow: 0 2px 5px rgba(0, 80, 0, 0.2);
+                }
+                .tree-1 .falling-leaf:nth-child(1) { top: 0; left: 25%; animation-delay: 0s; }
+                .tree-1 .falling-leaf:nth-child(2) { top: 0; left: 55%; animation-delay: 2s; }
+                .tree-2 .falling-leaf:nth-child(1) { top: 0; left: 40%; animation-delay: 1s; }
+                .tree-3 .falling-leaf:nth-child(1) { top: 0; left: 60%; animation-delay: 3s; }
+                .sparkle {
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: radial-gradient(circle, rgba(255,255,255,0.9), transparent);
+                    border-radius: 50%;
+                    animation: sparkle 2.5s ease-in-out infinite;
+                }
+                .tree-1 .sparkle:nth-child(1) { top: 10px; left: 15%; animation-delay: 0.8s; }
+                .tree-1 .sparkle:nth-child(2) { top: -20px; left: 65%; animation-delay: 1.5s; }
+                .tree-2 .sparkle:nth-child(1) { top: 0; left: 30%; animation-delay: 1.2s; }
+                /* More Flowers */
+                .flower {
+                    position: absolute;
+                    bottom: 0;
+                    background: radial-gradient(circle, #FF69B4 20%, #FF1493 50%, transparent 70%);
+                    border-radius: 50%;
+                    animation: bloom 3s ease-in-out infinite;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                }
+                /* Tree-1 Flowers (4 total) */
+                .tree-1 .flower:nth-child(1) { width: 30px; height: 30px; left: 30%; bottom: 10px; animation-delay: 0s; }
+                .tree-1 .flower:nth-child(2) { width: 25px; height: 25px; left: 70%; bottom: 5px; animation-delay: 1s; }
+                .tree-1 .flower:nth-child(3) { width: 20px; height: 20px; left: 20%; bottom: 8px; animation-delay: 0.5s; } /* New */
+                .tree-1 .flower:nth-child(4) { width: 22px; height: 22px; left: 60%; bottom: 12px; animation-delay: 1.8s; } /* New */
+                /* Tree-2 Flowers (3 total) */
+                .tree-2 .flower:nth-child(1) { width: 20px; height: 20px; left: 40%; bottom: 8px; animation-delay: 0.5s; }
+                .tree-2 .flower:nth-child(2) { width: 18px; height: 18px; left: 25%; bottom: 5px; animation-delay: 1.2s; } /* New */
+                .tree-2 .flower:nth-child(3) { width: 22px; height: 22px; left: 55%; bottom: 10px; animation-delay: 2s; } /* New */
+                /* Tree-3 Flowers (2 total) */
+                .tree-3 .flower:nth-child(1) { width: 18px; height: 18px; left: 50%; bottom: 5px; animation-delay: 1.5s; }
+                .tree-3 .flower:nth-child(2) { width: 16px; height: 16px; left: 35%; bottom: 8px; animation-delay: 0.8s; } /* New */
+                /* Ground Leaves */
+                .ground-leaf {
+                    position: absolute;
+                    bottom: 0;
+                    background: linear-gradient(45deg, #39E639, #22AA22);
+                    border-radius: 50% 20%;
+                    opacity: 0.8;
+                    animation: swayGround 4s ease-in-out infinite;
+                }
+                .ground-leaf:nth-child(1) { width: 20px; height: 20px; left: 10%; bottom: 15px; animation-delay: 0s; }
+                .ground-leaf:nth-child(2) { width: 15px; height: 15px; left: 85%; bottom: 10px; animation-delay: 1s; }
+                .ground-leaf:nth-child(3) { width: 18px; height: 18px; left: 45%; bottom: 20px; animation-delay: 2s; }
+                @keyframes swayTrunk {
+                    0%, 100% { transform: translateX(-50%) rotate(-2.5deg); }
+                    50% { transform: translateX(-50%) rotate(2.5deg); }
+                }
+                @keyframes swayBranch {
+                    0%, 100% { transform: rotate(-55deg) translateX(-4px); }
+                    50% { transform: rotate(-55deg) translateX(4px); }
+                }
+                @keyframes swayLeaves {
+                    0%, 100% { transform: translateX(-4px) rotate(-6deg); }
+                    50% { transform: translateX(4px) rotate(6deg); }
+                }
+                @keyframes fall {
+                    0% { transform: translateY(-120px) rotate(0deg); opacity: 0.9; }
+                    100% { transform: translateY(500px) rotate(900deg); opacity: 0; }
+                }
+                @keyframes sparkle {
+                    0%, 100% { opacity: 0; transform: scale(0.6); }
+                    50% { opacity: 1; transform: scale(1.2); }
+                }
+                @keyframes bloom {
+                    0%, 100% { transform: scale(0.9); }
+                    50% { transform: scale(1.1); }
+                }
+                @keyframes swayGround {
+                    0%, 100% { transform: translateX(-2px) rotate(-5deg); }
+                    50% { transform: translateX(2px) rotate(5deg); }
+                }
+                /* Form Styling */
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-30px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                h2 {
+                    color: #004445;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    font-size: 26px;
+                    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                }
+                .form-group {
+                    margin-bottom: 4px; /* Adjust margin to accommodate the error message space */
+                    position: relative;
+                }
+                label {
+                    display: block;
+                    color: #2c7873;
+                    margin-bottom: 8px;
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+                input[type="text"],
+                input[type="password"],
+                input[type="email"] {
+                    width: 100%;
+                    padding: 14px;
+                    border: 1px solid #2c7873;
+                    border-radius: 10px;
+                    box-sizing: border-box;
+                    background: #f9fffb;
+                    font-size: 16px;
+                    transition: all 0.3s ease;
+                }
+                input:focus {
+                    outline: none;
+                    border-color: #2c7873;
+                    box-shadow: 0 0 12px #033c3d;
+                    background: #fff;
+                }
+                .error {
+                    /* The error message is now part of the layout flow. */
+                    /* A minimum height is set to prevent other components from shifting when an error message appears. */
+                    color: #e63946;
+                    font-size: 12px;
+                    margin-top: 4px;
+                    min-height: 16px; /* Reserve space for one line of text */
+                }
+                button {
+                    width: 100%;
+                    padding: 14px;
+                    background: linear-gradient(90deg, #004445, #2c7873);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 17px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 5px 15px #2c7873;
+                }
+                button:hover {
+                    background: linear-gradient(90deg, #2c7873, #004445);
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 20px #033c3d;
+                }
+                /* Auth Links */
+                .auth-links {
+                    margin-top: 20px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .auth-links a {
+                    color: #004445;
+                    text-decoration: none;
+                    font-size: 14px;
+                    transition: color 0.3s ease;
+                }
+                .auth-links a:hover {
+                    color: #2c7873;
+                    text-decoration: underline;
+                }
+                /* Responsive Design */
+                @media (max-width: 768px) {
+                    .container { flex-direction: column; gap: 20px; }
+                    .forest-container { width: 300px; height: 400px; }
+                    .tree-1 { height: 260px; }
+                    .tree-2 { height: 220px; }
+                    .tree-3 { height: 180px; }
+                    .tree-1 .branches { width: 140px; height: 200px; }
+                    .tree-2 .branches { width: 110px; height: 160px; }
+                    .tree-3 .branches { width: 90px; height: 130px; }
+                    .tree-1 .branch:nth-child(1) { height: 60px; bottom: 110px; }
+                    .tree-1 .branch:nth-child(2) { height: 55px; bottom: 120px; }
+                    .tree-1 .branch:nth-child(3) { height: 50px; bottom: 80px; }
+                    .tree-1 .branch:nth-child(4) { height: 45px; bottom: 90px; }
+                    .tree-2 .branch:nth-child(1) { height: 50px; bottom: 100px; }
+                    .tree-2 .branch:nth-child(2) { height: 45px; bottom: 110px; }
+                    .tree-3 .branch:nth-child(1) { height: 40px; bottom: 80px; }
+                    .tree-1 .leaves:nth-child(1) { width: 80px; height: 80px; top: -30px; }
+                    .tree-1 .leaves:nth-child(2) { width: 70px; height: 70px; top: -35px; }
+                    .tree-1 .leaves:nth-child(3) { width: 65px; height: 65px; top: 5px; }
+                    .tree-1 .leaves:nth-child(4) { width: 60px; height: 60px; top: 15px; }
+                    .tree-1 .leaves:nth-child(5) { width: 65px; height: 65px; top: -20px; }
+                    .tree-1 .leaves:nth-child(6) { width: 60px; height: 60px; top: -25px; }
+                    .tree-1 .leaves:nth-child(7) { width: 55px; height: 55px; top: 0px; }
+                    .tree-2 .leaves:nth-child(1) { width: 65px; height: 65px; top: -25px; }
+                    .tree-2 .leaves:nth-child(2) { width: 55px; height: 55px; top: -30px; }
+                    .tree-2 .leaves:nth-child(3) { width: 50px; height: 50px; top: -10px; }
+                    .tree-2 .leaves:nth-child(4) { width: 50px; height: 50px; top: -15px; }
+                    .tree-2 .leaves:nth-child(5) { width: 45px; height: 45px; top: 0px; }
+                    .tree-3 .leaves:nth-child(1) { width: 50px; height: 50px; top: -20px; }
+                    .tree-3 .leaves:nth-child(2) { width: 45px; height: 45px; top: 0px; }
+                    .tree-3 .leaves:nth-child(3) { width: 40px; height: 40px; top: -25px; }
+                    .tree-3 .leaves:nth-child(4) { width: 35px; height: 35px; top: -5px; }
+                    .falling-leaf { width: 12px; height: 12px; }
+                    .flower { width: 20px; height: 20px; }
+                    .tree-1 .flower:nth-child(3) { width: 18px; height: 18px; }
+                    .tree-1 .flower:nth-child(4) { width: 18px; height: 18px; }
+                    .tree-2 .flower:nth-child(2) { width: 16px; height: 16px; }
+                    .tree-2 .flower:nth-child(3) { width: 18px; height: 18px; }
+                    .tree-3 .flower:nth-child(2) { width: 14px; height: 14px; }
+                    .ground-leaf { width: 15px; height: 15px; }
+                    @keyframes fall {
+                        0% { transform: translateY(-80px) rotate(0deg); opacity: 0.9; }
+                        100% { transform: translateY(400px) rotate(900deg); opacity: 0; }
+                    }
+                    .sparkle { width: 6px; height: 6px; }
+                }
+                @media (max-width: 480px) {
+                    .register-container { padding: 25px; width: 90%; }
+                    .forest-container { width: 220px; height: 300px; }
+                    .tree-1 { height: 200px; width: 25px; }
+                    .tree-2 { height: 160px; width: 20px; }
+                    .tree-3 { height: 120px; width: 15px; }
+                    .tree-1 .branches { width: 110px; height: 150px; }
+                    .tree-2 .branches { width: 90px; height: 120px; }
+                    .tree-3 .branches { width: 70px; height: 100px; }
+                    .tree-1 .branch:nth-child(1) { height: 50px; bottom: 80px; }
+                    .tree-1 .branch:nth-child(2) { height: 45px; bottom: 90px; }
+                    .tree-1 .branch:nth-child(3) { height: 40px; bottom: 60px; }
+                    .tree-1 .branch:nth-child(4) { height: 35px; bottom: 70px; }
+                    .tree-2 .branch:nth-child(1) { height: 40px; bottom: 70px; }
+                    .tree-2 .branch:nth-child(2) { height: 35px; bottom: 80px; }
+                    .tree-3 .branch:nth-child(1) { height: 30px; bottom: 60px; }
+                    .tree-1 .leaves:nth-child(1) { width: 60px; height: 60px; top: -20px; }
+                    .tree-1 .leaves:nth-child(2) { width: 55px; height: 55px; top: -25px; }
+                    .tree-1 .leaves:nth-child(3) { width: 50px; height: 50px; top: 0px; }
+                    .tree-1 .leaves:nth-child(4) { width: 45px; height: 45px; top: 10px; }
+                    .tree-1 .leaves:nth-child(5) { width: 50px; height: 50px; top: -15px; }
+                    .tree-1 .leaves:nth-child(6) { width: 45px; height: 45px; top: -10px; }
+                    .tree-1 .leaves:nth-child(7) { width: 40px; height: 40px; top: 5px; }
+                    .tree-2 .leaves:nth-child(1) { width: 50px; height: 50px; top: -15px; }
+                    .tree-2 .leaves:nth-child(2) { width: 45px; height: 45px; top: -20px; }
+                    .tree-2 .leaves:nth-child(3) { width: 40px; height: 40px; top: -5px; }
+                    .tree-2 .leaves:nth-child(4) { width: 40px; height: 40px; top: -10px; }
+                    .tree-2 .leaves:nth-child(5) { width: 35px; height: 35px; top: 0px; }
+                    .tree-3 .leaves:nth-child(1) { width: 40px; height: 40px; top: -10px; }
+                    .tree-3 .leaves:nth-child(2) { width: 35px; height: 35px; top: 5px; }
+                    .tree-3 .leaves:nth-child(3) { width: 35px; height: 35px; top: -15px; }
+                    .tree-3 .leaves:nth-child(4) { width: 30px; height: 30px; top: 0px; }
+                    .falling-leaf { width: 10px; height: 10px; }
+                    .flower { width: 15px; height: 15px; }
+                    .tree-1 .flower:nth-child(3) { width: 14px; height: 14px; }
+                    .tree-1 .flower:nth-child(4) { width: 14px; height: 14px; }
+                    .tree-2 .flower:nth-child(2) { width: 12px; height: 12px; }
+                    .tree-2 .flower:nth-child(3) { width: 14px; height: 14px; }
+                    .tree-3 .flower:nth-child(2) { width: 12px; height: 12px; }
+                    .ground-leaf { width: 12px; height: 12px; }
+                    @keyframes fall {
+                        0% { transform: translateY(-60px) rotate(0deg); opacity: 0.9; }
+                        100% { transform: translateY(300px) rotate(900deg); opacity: 0; }
+                    }
+                    .sparkle { width: 5px; height: 5px; }
+                    h2 { font-size: 22px; }
+                    input[type="text"], input[type="password"] { padding: 12px; font-size: 14px; }
+                    button { padding: 12px; font-size: 15px; }
+                    .form-group { margin-bottom: 20px; }
+                    label { font-size: 13px; }
+                }
+            `}</style>
+            <div className="container">
+                <ForestAnimation />
+                <LoginForm />
+            </div>
+        </>
+    );
+};
+
+export default LoginPage;
