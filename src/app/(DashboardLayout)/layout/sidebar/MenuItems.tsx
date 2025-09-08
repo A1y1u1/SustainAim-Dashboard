@@ -24,10 +24,26 @@ const Menuitems = [
     href: "/",
   },
   {
+    navlabel: true,
+    subheader: "PROCESSED DATA",
+  },
+  {
     id: uniqueId(),
-    title: "Processed Data",
+    title: "Scope 1",
     icon: IconBrandDatabricks,
-    href: "/process-data",
+    href: "process-data",
+  },
+  {
+    id: uniqueId(),
+    title: "Scope 2",
+    icon: IconBrandDatabricks,
+    href: "/Scope2",
+  },
+  {
+    id: uniqueId(),
+    title: "Scope 3",
+    icon: IconBrandDatabricks,
+    href: "/Scope3",
   },
   {
     navlabel: true,
@@ -81,5 +97,3 @@ const Menuitems = [
 ];
 
 export default Menuitems;
-
-
