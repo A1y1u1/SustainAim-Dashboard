@@ -31,7 +31,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Scope 1",
     icon: IconBrandDatabricks,
-    href: "process-data",
+    href: "/Scope1",
   },
   {
     id: uniqueId(),
