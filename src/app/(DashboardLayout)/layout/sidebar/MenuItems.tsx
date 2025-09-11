@@ -25,7 +25,7 @@ const Menuitems = [
   },
   {
     navlabel: true,
-    subheader: "PROCESSED DATA",
+    subheader: "INVENTORY",
   },
   {
     id: uniqueId(),

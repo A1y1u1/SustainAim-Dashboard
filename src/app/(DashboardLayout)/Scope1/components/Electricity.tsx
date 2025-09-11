@@ -537,13 +537,9 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
   const currentData = filteredData.slice(startIndex, endIndex);
 
   const categories = [
-    "Electricity",
     "Fossil Fuel",
-    "Travel",
-    "Transportation",
-    "Waste",
     "Fugitives",
-    "Goods & Services",
+    "Process Emission",
   ];
 
   const unitTypes = ["KWH", "Kg", "Liter"];
@@ -931,7 +927,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit
+                Activity Data
               </label>
               <input
                 type="number"
@@ -1132,7 +1128,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit
+                Activity Data
               </label>
               <input
                 type="number"
@@ -1148,7 +1144,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit Type
+                Activity Data Type
               </label>
               <select
                 name="activityUnitType"
@@ -1292,7 +1288,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
               </div>
               <div>
                 <span className="font-medium" style={{ color: theme.primaryColor } as React.CSSProperties}>
-                  Activity Unit:
+                  Activity Data:
                 </span>{" "}
                 {selectedRecord.activityUnit.toLocaleString()} {selectedRecord.activityUnitType}
               </div>
@@ -1349,18 +1345,16 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">CATEGORY</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">INPUT DATE</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">INVOICE/BILL</th>
-                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIVITY UNIT</th>
+                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIVITY Data</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EMISSION FACTOR</th>
-                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EF SOURCE</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EMISSION (TCO2E)</th>
-                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">CALCULATION</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y bg-white" style={{ divideColor: theme.primaryColor } as React.CSSProperties}>
               {currentData.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={10} className="px-6 py-4 text-center text-gray-500">
                     No data available
                   </td>
                 </tr>
@@ -1384,17 +1378,8 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                       {record.activityUnit.toLocaleString()} {record.activityUnitType}
                     </td>
                     <td className="px-6 py-4">{record.emissionFactor} kg CO2e/unit</td>
-                    <td className="px-6 py-4">{record.efSource}</td>
                     <td className="px-6 py-4 font-extrabold text-red-600">
                       {record.emissionTCO2e.toFixed(3)} tCO2e
-                    </td>
-                    <td className="px-6 py-4">
-                      <div
-                        className="text-xs font-mono rounded-md px-3 py-1 inline-block select-text"
-                        style={{ backgroundColor: theme.primaryColor, color: "#ffffff" } as React.CSSProperties}
-                      >
-                        {record.calculation}
-                      </div>
                     </td>
                     <td className="px-6 py-4 text-center cursor-pointer select-none relative" style={{ color: theme.primaryColor } as React.CSSProperties}>
                       <button onClick={() => toggleMenu(record.id)} aria-label="Open actions menu for this record">

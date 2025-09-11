@@ -16,6 +16,7 @@ interface EmissionData {
   year: number;
   month: string;
   category: string;
+  subCategory?: string; // Optional sub-category
   inputDate: string;
   invoiceBill: string;
   activityUnit: number;
@@ -269,7 +270,8 @@ const mockEmissionData: EmissionData[] = [
     id: 18,
     year: 2024,
     month: "January",
-    category: "Transportation",
+    category: "Transportation & Distribution",
+    subCategory: "Upstream",
     inputDate: "2024-01-15",
     invoiceBill: "INV-2024-018",
     activityUnit: 800.0,
@@ -283,7 +285,8 @@ const mockEmissionData: EmissionData[] = [
     id: 19,
     year: 2024,
     month: "February",
-    category: "Transportation",
+    category: "Transportation & Distribution",
+    subCategory: "Downstream",
     inputDate: "2024-02-15",
     invoiceBill: "INV-2024-019",
     activityUnit: 900.0,
@@ -354,6 +357,7 @@ const mockEmissionData: EmissionData[] = [
     year: 2024,
     month: "January",
     category: "Goods & Services",
+    subCategory: "Purchased goods & services. COMBINED)",
     inputDate: "2024-01-15",
     invoiceBill: "INV-2024-024",
     activityUnit: 3000.0,
@@ -368,6 +372,7 @@ const mockEmissionData: EmissionData[] = [
     year: 2024,
     month: "February",
     category: "Goods & Services",
+    subCategory: "Capital goods",
     inputDate: "2024-02-15",
     invoiceBill: "INV-2024-025",
     activityUnit: 3500.0,
@@ -376,6 +381,111 @@ const mockEmissionData: EmissionData[] = [
     efSource: "DEFRA",
     emissionTCO2e: 0.175,
     calculation: "3500 × 0.05 ÷ 1000",
+  },
+  {
+    id: 26,
+    year: 2024,
+    month: "March",
+    category: "Sold Products",
+    subCategory: "Processing of sold products",
+    inputDate: "2024-03-20",
+    invoiceBill: "INV-2024-026",
+    activityUnit: 5000.0,
+    activityUnitType: "Kg",
+    emissionFactor: 0.08,
+    efSource: "DEFRA",
+    emissionTCO2e: 0.4,
+    calculation: "5000 × 0.08 ÷ 1000",
+  },
+  {
+    id: 27,
+    year: 2024,
+    month: "April",
+    category: "Sold Products",
+    subCategory: "Use of sold products",
+    inputDate: "2024-04-20",
+    invoiceBill: "INV-2024-027",
+    activityUnit: 10000.0,
+    activityUnitType: "Kg",
+    emissionFactor: 0.1,
+    efSource: "DEFRA",
+    emissionTCO2e: 1.0,
+    calculation: "10000 × 0.1 ÷ 1000",
+  },
+  {
+    id: 28,
+    year: 2024,
+    month: "May",
+    category: "Sold Products",
+    subCategory: "End-of-life treatment of Sold products",
+    inputDate: "2024-05-20",
+    invoiceBill: "INV-2024-028",
+    activityUnit: 2500.0,
+    activityUnitType: "Kg",
+    emissionFactor: 0.2,
+    efSource: "EPA WARM",
+    emissionTCO2e: 0.5,
+    calculation: "2500 × 0.2 ÷ 1000",
+  },
+  {
+    id: 29,
+    year: 2024,
+    month: "June",
+    category: "Other Assets",
+    subCategory: "Upstream leased assets",
+    inputDate: "2024-06-20",
+    invoiceBill: "INV-2024-029",
+    activityUnit: 1500.0,
+    activityUnitType: "sqm",
+    emissionFactor: 0.05,
+    efSource: "GHG Protocol",
+    emissionTCO2e: 0.075,
+    calculation: "1500 * 0.05 / 1000",
+  },
+  {
+    id: 30,
+    year: 2024,
+    month: "July",
+    category: "Other Assets",
+    subCategory: "Downstream leased assets",
+    inputDate: "2024-07-20",
+    invoiceBill: "INV-2024-030",
+    activityUnit: 2000.0,
+    activityUnitType: "sqm",
+    emissionFactor: 0.06,
+    efSource: "GHG Protocol",
+    emissionTCO2e: 0.12,
+    calculation: "2000 * 0.06 / 1000",
+  },
+  {
+    id: 31,
+    year: 2024,
+    month: "August",
+    category: "Other Assets",
+    subCategory: "Franchises",
+    inputDate: "2024-08-20",
+    invoiceBill: "INV-2024-031",
+    activityUnit: 5.0,
+    activityUnitType: "franchise",
+    emissionFactor: 10,
+    efSource: "GHG Protocol",
+    emissionTCO2e: 0.05,
+    calculation: "5 * 10 / 1000",
+  },
+  {
+    id: 32,
+    year: 2024,
+    month: "September",
+    category: "Other Assets",
+    subCategory: "Investments",
+    inputDate: "2024-09-20",
+    invoiceBill: "INV-2024-032",
+    activityUnit: 100000.0,
+    activityUnitType: "USD",
+    emissionFactor: 0.0002,
+    efSource: "GHG Protocol",
+    emissionTCO2e: 20,
+    calculation: "100000 * 0.0002 / 1000",
   },
 ];
 
@@ -515,19 +625,35 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<EmissionData | null>(null);
   const [data, setData] = useState<EmissionData[]>([...mockEmissionData].reverse());
-  const [formData, setFormData] = useState({
-    category: category === "all" ? "Electricity" : category,
-    year: new Date().getFullYear(),
-    month: new Date().toLocaleString("default", { month: "long" }),
-    inputDate: new Date().toISOString().split("T")[0],
-    invoiceBill: "",
-    activityUnit: 0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
+  const [formData, setFormData] = useState(() => {
+    const initialCategory = category === "all" ? "Goods & Services" : category;
+    let initialSubCategory = "";
+    if (initialCategory === "Goods & Services") {
+      initialSubCategory = "Purchased goods & services. COMBINED)";
+    } else if (initialCategory === "Transportation & Distribution") {
+      initialSubCategory = "Upstream";
+    } else if (initialCategory === "Sold Products") {
+      initialSubCategory = "Processing of sold products";
+    } else if (initialCategory === "Other Assets") {
+      initialSubCategory = "Upstream leased assets";
+    }
+
+    return {
+      category: initialCategory,
+      subCategory: initialSubCategory,
+      year: new Date().getFullYear(),
+      month: new Date().toLocaleString("default", { month: "long" }),
+      inputDate: new Date().toISOString().split("T")[0],
+      invoiceBill: "",
+      activityUnit: 0,
+      activityUnitType: "KWH",
+      emissionFactor: 0.709,
+      efSource: "EPA eGRID",
+    };
   });
   const itemsPerPage = 12;
 
+  const categoriesWithSubcategories = ["Goods & Services", "Transportation & Distribution", "Sold Products", "Other Assets"];
   // Filter data based on category prop
   const filteredData = category === "all" ? data : data.filter((record) => record.category === category);
   const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
@@ -537,13 +663,13 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
   const currentData = filteredData.slice(startIndex, endIndex);
 
   const categories = [
-    "Electricity",
-    "Fossil Fuel",
-    "Travel",
-    "Transportation",
-    "Waste",
-    "Fugitives",
     "Goods & Services",
+    "Transportation & Distribution",
+    "Waste",
+    "Business Travel",
+    "Employee Commuting",
+    "Sold Products",
+    "Other Assets"
   ];
 
   const unitTypes = ["KWH", "Kg", "Liter"];
@@ -570,10 +696,25 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "year" || name === "activityUnit" || name === "emissionFactor" ? parseFloat(value) || 0 : value,
-    }));
+    setFormData((prev) => {
+      const newState = {
+        ...prev,
+        [name]: name === "year" || name === "activityUnit" || name === "emissionFactor" ? parseFloat(value) || 0 : value,
+      };
+
+      if (name === "category") {
+        if (value === "Goods & Services") {
+          newState.subCategory = "Purchased goods & services. COMBINED)";
+        } else if (value === "Transportation & Distribution") {
+          newState.subCategory = "Upstream";
+        } else if (value === "Sold Products") {
+          newState.subCategory = "Processing of sold products";
+        } else if (value === "Other Assets") {
+          newState.subCategory = "Upstream leased assets";
+        }
+      }
+      return newState;
+    });
   };
 
   const handleAddData = () => {
@@ -581,6 +722,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     const newRecord: EmissionData = {
       id: data.length + 1,
       category: formData.category,
+      subCategory: categoriesWithSubcategories.includes(formData.category) ? formData.subCategory : undefined,
       year: formData.year,
       month: formData.month,
       inputDate: formData.inputDate,
@@ -594,8 +736,21 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     };
     setData([newRecord, ...data]);
     setIsAddModalOpen(false);
+    // Reset form
+    const initialCategory = category === "all" ? "Goods & Services" : category;
+    let initialSubCategory = "";
+    if (initialCategory === "Goods & Services") {
+      initialSubCategory = "Purchased goods & services. COMBINED)";
+    } else if (initialCategory === "Transportation & Distribution") {
+      initialSubCategory = "Upstream";
+    } else if (initialCategory === "Sold Products") {
+      initialSubCategory = "Processing of sold products";
+    } else if (initialCategory === "Other Assets") {
+      initialSubCategory = "Upstream leased assets";
+    }
     setFormData({
-      category: category === "all" ? "Electricity" : category,
+      category: initialCategory,
+      subCategory: initialSubCategory,
       year: new Date().getFullYear(),
       month: new Date().toLocaleString("default", { month: "long" }),
       inputDate: new Date().toISOString().split("T")[0],
@@ -614,6 +769,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
       const updatedRecord: EmissionData = {
         ...selectedRecord,
         category: formData.category,
+        subCategory: categoriesWithSubcategories.includes(formData.category) ? formData.subCategory : undefined,
         year: formData.year,
         month: formData.month,
         inputDate: formData.inputDate,
@@ -628,8 +784,21 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
       setData(data.map((record) => (record.id === selectedRecord.id ? updatedRecord : record)));
       setIsEditModalOpen(false);
       setSelectedRecord(null);
+      // Reset form
+      const initialCategory = category === "all" ? "Goods & Services" : category;
+      let initialSubCategory = "";
+      if (initialCategory === "Goods & Services") {
+        initialSubCategory = "Purchased goods & services. COMBINED)";
+      } else if (initialCategory === "Transportation & Distribution") {
+        initialSubCategory = "Upstream";
+      } else if (initialCategory === "Sold Products") {
+        initialSubCategory = "Processing of sold products";
+      } else if (initialCategory === "Other Assets") {
+        initialSubCategory = "Upstream leased assets";
+      }
       setFormData({
-        category: category === "all" ? "Electricity" : category,
+        category: initialCategory,
+        subCategory: initialSubCategory,
         year: new Date().getFullYear(),
         month: new Date().toLocaleString("default", { month: "long" }),
         inputDate: new Date().toISOString().split("T")[0],
@@ -651,9 +820,21 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
   const handleEditClick = (id: number) => {
     const record = data.find((r) => r.id === id);
     if (record) {
+      let subCategoryDefault = "";
+      if (record.category === "Goods & Services") {
+        subCategoryDefault = "Purchased goods & services. COMBINED)";
+      } else if (record.category === "Transportation & Distribution") {
+        subCategoryDefault = "Upstream";
+      } else if (record.category === "Sold Products") {
+        subCategoryDefault = "Processing of sold products";
+      } else if (record.category === "Other Assets") {
+        subCategoryDefault = "Upstream leased assets";
+      }
+
       setSelectedRecord(record);
       setFormData({
         category: record.category,
+        subCategory: record.subCategory || subCategoryDefault,
         year: record.year,
         month: record.month,
         inputDate: record.inputDate,
@@ -695,6 +876,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
         Year: record.year,
         Month: record.month,
         Category: record.category,
+        "Sub Category": record.subCategory || "",
         "Input Date": formatDate(record.inputDate),
         "Invoice/Bill": record.invoiceBill,
         "Activity Unit": record.activityUnit,
@@ -844,6 +1026,52 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 ))}
               </select>
             </div>
+            {(formData.category === "Goods & Services" || formData.category === "Transportation & Distribution" || formData.category === "Sold Products" || formData.category === "Other Assets") && (
+              <div>
+                <label
+                  className="block text-sm font-medium"
+                  style={{ color: theme.primaryColor } as React.CSSProperties}
+                >
+                  Sub Category
+                </label>
+                <select
+                  name="subCategory"
+                  value={formData.subCategory || ''}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-md border border-gray-300 dark:border-gray-600 p-3 focus:ring-[#2c7873] focus:border-[#2c7873] bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  required
+                >
+                  {formData.category === "Goods & Services" ? (
+                    <>
+                      <option value="Purchased goods & services. COMBINED)">
+                        Purchased Goods & Services
+                      </option>
+                      <option value="Capital goods">Capital Goods</option>
+                    </>
+                  ) : formData.category === "Transportation & Distribution" ? (
+                    <>
+                      <option value="Upstream">Upstream</option>
+                      <option value="Downstream">Downstream</option>
+                    </>
+                  ) : formData.category === "Sold Products" ? (
+                    <>
+                      <option value="Processing of sold products">Processing of sold products</option>
+                      <option value="Use of sold products">Use of sold products</option>
+                      <option value="End-of-life treatment of Sold products">
+                        End-of-life treatment of Sold products
+                      </option>
+                    </>
+                  ) : formData.category === "Other Assets" ? (
+                    <>
+                      <option value="Upstream leased assets">Upstream leased assets</option>
+                      <option value="Downstream leased assets">Downstream leased assets</option>
+                      <option value="Franchises">Franchises</option>
+                      <option value="Investments">Investments</option>
+                    </>
+                  ) : null}
+                </select>
+              </div>
+            )}
             <div>
               <label
                 className="block text-sm font-medium"
@@ -1266,6 +1494,14 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 </span>{" "}
                 {selectedRecord.category}
               </div>
+              {(selectedRecord.category === "Goods & Services" || selectedRecord.category === "Transportation & Distribution" || selectedRecord.category === "Sold Products" || selectedRecord.category === "Other Assets") && selectedRecord.subCategory && (
+                <div>
+                  <span className="font-medium" style={{ color: theme.primaryColor } as React.CSSProperties}>
+                    Sub Category:
+                  </span>{" "}
+                  {selectedRecord.subCategory}
+                </div>
+              )}
               <div>
                 <span className="font-medium" style={{ color: theme.primaryColor } as React.CSSProperties}>
                   Year:
@@ -1347,20 +1583,19 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">YEAR</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">MONTH</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">CATEGORY</th>
+                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">SUB CATEGORY</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">INPUT DATE</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">INVOICE/BILL</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIVITY UNIT</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EMISSION FACTOR</th>
-                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EF SOURCE</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EMISSION (TCO2E)</th>
-                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">CALCULATION</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y bg-white" style={{ divideColor: theme.primaryColor } as React.CSSProperties}>
               {currentData.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={11} className="px-6 py-4 text-center text-gray-500">
                     No data available
                   </td>
                 </tr>
@@ -1374,6 +1609,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                     <td className="px-6 py-4 font-semibold">{record.year}</td>
                     <td className="px-6 py-4">{record.month}</td>
                     <td className="px-6 py-4 font-semibold">{record.category}</td>
+                    <td className="px-6 py-4">{record.subCategory || "-"}</td>
                     <td className="px-6 py-4">{formatDate(record.inputDate)}</td>
                     <td className="px-6 py-4">
                       <a href="#" className="font-semibold hover:underline" style={{ color: theme.primaryColor } as React.CSSProperties}>
@@ -1384,17 +1620,8 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                       {record.activityUnit.toLocaleString()} {record.activityUnitType}
                     </td>
                     <td className="px-6 py-4">{record.emissionFactor} kg CO2e/unit</td>
-                    <td className="px-6 py-4">{record.efSource}</td>
                     <td className="px-6 py-4 font-extrabold text-red-600">
                       {record.emissionTCO2e.toFixed(3)} tCO2e
-                    </td>
-                    <td className="px-6 py-4">
-                      <div
-                        className="text-xs font-mono rounded-md px-3 py-1 inline-block select-text"
-                        style={{ backgroundColor: theme.primaryColor, color: "#ffffff" } as React.CSSProperties}
-                      >
-                        {record.calculation}
-                      </div>
                     </td>
                     <td className="px-6 py-4 text-center cursor-pointer select-none relative" style={{ color: theme.primaryColor } as React.CSSProperties}>
                       <button onClick={() => toggleMenu(record.id)} aria-label="Open actions menu for this record">

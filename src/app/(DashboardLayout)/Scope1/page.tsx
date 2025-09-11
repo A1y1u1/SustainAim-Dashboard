@@ -18,6 +18,8 @@ const BasicTableOne: React.FC = () => {
         return <Electricity category="Fossil Fuel" />;
       case "fugitives":
         return <Electricity category="Fugitives" />;
+      case "process":
+        return <Electricity category="Process" />;
       default:
         return <Electricity category="all" />;
     }
@@ -35,7 +37,7 @@ const BasicTableOne: React.FC = () => {
             src="https://storage.googleapis.com/a1aa/image/ba27555c-cef3-4940-540a-d8814276f2f8.jpg" 
             width={48}
           />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Processed Data</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Scope 1 Emissions Data</h2>
         </div>
         <div className="flex items-center space-x-4">
           <Image
@@ -85,6 +87,18 @@ const BasicTableOne: React.FC = () => {
         >
           <FugitivesIcon />
           <span>Fugitives</span>
+        </button>
+        <button 
+          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
+            activeTab === 'process' 
+              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
+              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
+          }`}
+          style={{ borderBottomColor: activeTab === 'process' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('process')}
+        >
+          <FugitivesIcon />
+          <span>Process Emission</span>
         </button>
       </nav>
 

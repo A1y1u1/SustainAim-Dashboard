@@ -14,20 +14,20 @@ const BasicTableOne: React.FC = () => {
     switch (activeTab) {
       case "all":
         return <Electricity category="all" />;
-      case "electricity":
-        return <Electricity category="Electricity" />;
-      case "fossil-fuel":
-        return <Electricity category="Fossil Fuel" />;
-      case "travel":
-        return <Electricity category="Travel" />;
-      case "transportation":
-        return <Electricity category="Transportation" />;
-      case "waste":
-        return <Electricity category="Waste" />;
-      case "fugitives":
-        return <Electricity category="Fugitives" />;
       case "goods-services":
         return <Electricity category="Goods & Services" />;
+      case "transportation":
+        return <Electricity category="Transportation & Distribution" />;
+      case "waste":
+        return <Electricity category="Waste" />;
+      case "Business Travel":
+        return <Electricity category="Business Travel" />;
+      case "Employee Commuting":
+        return <Electricity category="Employee Commuting" />;
+      case "Sold Products":
+        return <Electricity category="Sold Products" />;
+      case "Other Assets":
+        return <Electricity category="Other Assets" />;
       default:
         return <Electricity category="all" />;
     }
@@ -45,7 +45,7 @@ const BasicTableOne: React.FC = () => {
             src="https://storage.googleapis.com/a1aa/image/ba27555c-cef3-4940-540a-d8814276f2f8.jpg" 
             width={48}
           />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Processed Data</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Scope 3 Other Indirect Emissions Data</h2>
         </div>
         <div className="flex items-center space-x-4">
           <Image
@@ -59,7 +59,7 @@ const BasicTableOne: React.FC = () => {
       </header>
       
       {/* Navigation Tabs */}
-      <nav className="flex space-x-8 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-300 px-6">
+      <nav className="flex space-x-4 md:space-x-6 border-b border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-300 px-6 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
             activeTab === 'all' 
@@ -74,39 +74,15 @@ const BasicTableOne: React.FC = () => {
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'electricity' 
+            activeTab === 'goods-services' 
               ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
               : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
           }`}
-          style={{ borderBottomColor: activeTab === 'electricity' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('electricity')}
+          style={{ borderBottomColor: activeTab === 'goods-services' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('goods-services')}
         >
-          <ElectricityIcon />
-          <span>Electricity</span>
-        </button>
-        <button 
-          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'fossil-fuel' 
-              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
-              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
-          }`}
-          style={{ borderBottomColor: activeTab === 'fossil-fuel' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('fossil-fuel')}
-        >
-          <FossilFuelIcon /> 
-          <span>Fossil Fuel</span>
-        </button>
-        <button 
-          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'travel' 
-              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
-              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
-          }`}
-          style={{ borderBottomColor: activeTab === 'travel' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('travel')}
-        >
-          <TravelIcon />
-          <span>Travel</span>
+          <GoodsServicesIcon />
+          <span>Goods & Services</span>
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
@@ -118,7 +94,7 @@ const BasicTableOne: React.FC = () => {
           onClick={() => handleTabClick('transportation')}
         >
           <TransportationIcon />
-          <span>Transportation</span>
+          <span>Transportation & Distribution</span>
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
@@ -134,27 +110,51 @@ const BasicTableOne: React.FC = () => {
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'fugitives' 
+            activeTab === 'Business Travel' 
               ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
               : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
           }`}
-          style={{ borderBottomColor: activeTab === 'fugitives' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('fugitives')}
+          style={{ borderBottomColor: activeTab === 'Business Travel' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('Business Travel')}
         >
-          <FugitivesIcon />
-          <span>Fugitives</span>
+          <BusinessTravelIcon />
+          <span>Business Travel</span>
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'goods-services' 
+            activeTab === 'Employee Commuting' 
               ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
               : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
           }`}
-          style={{ borderBottomColor: activeTab === 'goods-services' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('goods-services')}
+          style={{ borderBottomColor: activeTab === 'Employee Commuting' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('Employee Commuting')}
         >
-          <GoodsServicesIcon />
-          <span>Goods & Services</span>
+          <EmployeeCommutingIcon />
+          <span>Employee Commuting</span>
+        </button>
+        <button 
+          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
+            activeTab === 'Sold Products' 
+              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
+              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
+          }`}
+          style={{ borderBottomColor: activeTab === 'Sold Products' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('Sold Products')}
+        >
+          <SoldProductsIcon />
+          <span>Sold Products</span>
+        </button>
+        <button 
+          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
+            activeTab === 'Other Assets' 
+              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
+              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
+          }`}
+          style={{ borderBottomColor: activeTab === 'Other Assets' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('Other Assets')}
+        >
+          <OtherAssetsIcon />
+          <span>Other Assets</span>
         </button>
       </nav>
 
@@ -171,25 +171,6 @@ const AllIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-grid-3x2-gap-fill" viewBox="0 0 16 16">
   <path d="M1 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 9a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
  </svg>
-);
-
-const ElectricityIcon = () => (
-  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-    <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-  </svg>
-);
-
-const FossilFuelIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-gas-station">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M3 21a1 1 0 0 1 0 -2v-13a3 3 0 0 1 3 -3h6a3 3 0 0 1 3 3v4a3 3 0 0 1 3 3v3a.5 .5 0 1 0 1 0v-6a2 2 0 0 1 -2 -2v-.585l-.707 -.708a1 1 0 0 1 -.083 -1.32l.083 -.094a1 1 0 0 1 1.414 0l3.003 3.002l.095 .112l.028 .04l.044 .073l.052 .11l.031 .09l.02 .076l.012 .078l.008 .126v7a2.5 2.5 0 1 1 -5 0v-3a1 1 0 0 0 -1 -1v7a1 1 0 0 1 0 2zm9 -16h-6a1 1 0 0 0 -1 1v4h8v-4a1 1 0 0 0 -1 -1" />
-  </svg>
-);
-
-const TravelIcon = () => (
-  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-  </svg>
 );
 
 const TransportationIcon = () => (
@@ -211,15 +192,54 @@ const WasteIcon = () => (
   </svg>
 );
 
-const FugitivesIcon = () => (
-  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-    <path d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414L15 8.414V14a1 1 0 11-2 0v-2H9a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8.414l1.293 1.293a1 1 0 001.414-1.414L13.414 6H8z" />
-  </svg>
-);
-
 const GoodsServicesIcon = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
     <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+  </svg>
+);
+
+const BusinessTravelIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-briefcase">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M3 7m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+    <path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" />
+    <path d="M12 12l0 6" />
+    <path d="M3 13l18 0" />
+  </svg>
+);
+
+const EmployeeCommutingIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-users">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+  </svg>
+);
+
+const SoldProductsIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+    <path d="M17 17h-11v-14h-2" />
+    <path d="M6 5l14 1l-1 7h-13" />
+  </svg>
+);
+
+const OtherAssetsIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+    <path d="M3 21l18 0" />
+    <path d="M5 21v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" />
+    <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+    <path d="M10 9l0 .01" />
+    <path d="M14 9l0 .01" />
+    <path d="M10 12l0 .01" />
+    <path d="M14 12l0 .01" />
+    <path d="M10 15l0 .01" />
+    <path d="M14 15l0 .01" />
   </svg>
 );
 

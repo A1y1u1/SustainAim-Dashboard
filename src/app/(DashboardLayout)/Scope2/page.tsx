@@ -16,18 +16,10 @@ const BasicTableOne: React.FC = () => {
         return <Electricity category="all" />;
       case "electricity":
         return <Electricity category="Electricity" />;
-      case "fossil-fuel":
-        return <Electricity category="Fossil Fuel" />;
-      case "travel":
-        return <Electricity category="Travel" />;
-      case "transportation":
-        return <Electricity category="Transportation" />;
-      case "waste":
-        return <Electricity category="Waste" />;
-      case "fugitives":
-        return <Electricity category="Fugitives" />;
-      case "goods-services":
-        return <Electricity category="Goods & Services" />;
+      case "Steam":
+        return <Electricity category="Steam" />;
+      case "Heating & Cooling":
+        return <Electricity category="Heating & Cooling" />;
       default:
         return <Electricity category="all" />;
     }
@@ -45,7 +37,7 @@ const BasicTableOne: React.FC = () => {
             src="https://storage.googleapis.com/a1aa/image/ba27555c-cef3-4940-540a-d8814276f2f8.jpg" 
             width={48}
           />
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Processed Data</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Scope 2 Indirect Energy  Emissions Data</h2>
         </div>
         <div className="flex items-center space-x-4">
           <Image
@@ -86,75 +78,27 @@ const BasicTableOne: React.FC = () => {
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'fossil-fuel' 
+            activeTab === 'Steam' 
               ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
               : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
           }`}
-          style={{ borderBottomColor: activeTab === 'fossil-fuel' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('fossil-fuel')}
+          style={{ borderBottomColor: activeTab === 'Steam' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('Steam')}
         >
           <FossilFuelIcon /> 
-          <span>Fossil Fuel</span>
+          <span>Steam</span>
         </button>
         <button 
           className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'travel' 
+            activeTab === 'Heating & Cooling' 
               ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
               : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
           }`}
-          style={{ borderBottomColor: activeTab === 'travel' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('travel')}
+          style={{ borderBottomColor: activeTab === 'Heating & Cooling' ? '#2c7873' : 'transparent' }}
+          onClick={() => handleTabClick('Heating & Cooling')}
         >
           <TravelIcon />
-          <span>Travel</span>
-        </button>
-        <button 
-          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'transportation' 
-              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
-              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
-          }`}
-          style={{ borderBottomColor: activeTab === 'transportation' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('transportation')}
-        >
-          <TransportationIcon />
-          <span>Transportation</span>
-        </button>
-        <button 
-          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'waste' 
-              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
-              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
-          }`}
-          style={{ borderBottomColor: activeTab === 'waste' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('waste')}
-        >
-          <WasteIcon />
-          <span>Waste</span>
-        </button>
-        <button 
-          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'fugitives' 
-              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
-              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
-          }`}
-          style={{ borderBottomColor: activeTab === 'fugitives' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('fugitives')}
-        >
-          <FugitivesIcon />
-          <span>Fugitives</span>
-        </button>
-        <button 
-          className={`flex items-center space-x-2 pb-3 border-b-2 transition-all duration-300 ${
-            activeTab === 'goods-services' 
-              ? 'text-[#2c7873] font-semibold dark:text-[#2c7873]' 
-              : 'border-transparent hover:text-[#2c7873] dark:hover:text-[#2c7873]'
-          }`}
-          style={{ borderBottomColor: activeTab === 'goods-services' ? '#2c7873' : 'transparent' }}
-          onClick={() => handleTabClick('goods-services')}
-        >
-          <GoodsServicesIcon />
-          <span>Goods & Services</span>
+          <span>Heating & Cooling</span>
         </button>
       </nav>
 
