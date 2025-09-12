@@ -11,11 +11,39 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
+import {
+  IconListCheck,
+  IconMail,
+  IconTag,
+  IconUser,
+} from "@tabler/icons-react";
+
+const profileMenuItems = [
+  {
+    href: "/user-profile",
+    title: "My Profile",
+    icon: <IconUser width={20} />,
+  },
+  {
+    href: "/apps/email",
+    title: "My Account",
+    icon: <IconMail width={20} />,
+  },
+  {
+    href: "/apps/notes",
+    title: "My Tasks",
+    icon: <IconListCheck width={20} />,
+  },
+  {
+    href: "/Pricing",
+    title: "Pricing",
+    icon: <IconTag width={20} />,
+  },
+];
 
 const Profile = () => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
-  const handleClick2 = (event: any) => {
+  const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
+  const handleClick2 = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl2(event.currentTarget);
   };
   const handleClose2 = () => {
@@ -31,7 +59,7 @@ const Profile = () => {
         aria-controls="msgs-menu"
         aria-haspopup="true"
         sx={{
-          ...(typeof anchorEl2 === "object" && {
+          ...(anchorEl2 && {
             color: "primary.main",
           }),
         }}
@@ -63,24 +91,12 @@ const Profile = () => {
           },
         }}
       >
-        <MenuItem>
-          <ListItemIcon>
-            <IconUser width={20} />
-          </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
+        {profileMenuItems.map((item) => (
+          <MenuItem key={item.title} component={Link} href={item.href} onClick={handleClose2}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText>{item.title}</ListItemText>
+          </MenuItem>
+        ))}
         <Box mt={1} py={1} px={2}>
           <Button
             href="/authentication/login"

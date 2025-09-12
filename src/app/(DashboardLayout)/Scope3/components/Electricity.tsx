@@ -1159,7 +1159,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit
+                Activity Data
               </label>
               <input
                 type="number"
@@ -1175,7 +1175,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit Type
+                Activity Data Type
               </label>
               <select
                 name="activityUnitType"
@@ -1360,7 +1360,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit
+                Activity Data
               </label>
               <input
                 type="number"
@@ -1376,7 +1376,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 className="block text-sm font-medium"
                 style={{ color: theme.primaryColor } as React.CSSProperties}
               >
-                Activity Unit Type
+                Activity Data Type
               </label>
               <select
                 name="activityUnitType"
@@ -1528,7 +1528,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
               </div>
               <div>
                 <span className="font-medium" style={{ color: theme.primaryColor } as React.CSSProperties}>
-                  Activity Unit:
+                  Activity Data:
                 </span>{" "}
                 {selectedRecord.activityUnit.toLocaleString()} {selectedRecord.activityUnitType}
               </div>
@@ -1586,7 +1586,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">SUB CATEGORY</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">INPUT DATE</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">INVOICE/BILL</th>
-                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIVITY UNIT</th>
+                <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIVITY DATA</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EMISSION FACTOR</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">EMISSION (TCO2E)</th>
                 <th className="px-6 py-4 text-left font-bold text-xs tracking-wider uppercase">ACTIONS</th>
