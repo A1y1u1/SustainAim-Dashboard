@@ -1,7 +1,9 @@
 "use client";
 
 import Link from 'next/link';
-import { FormEvent, useState } from 'react';
+import React from 'react';
+import { Typography } from '@mui/material';
+import AuthLogin from '../auth/AuthLogin';
 
 /**
  * A purely presentational component for the decorative forest animation.
@@ -71,91 +73,21 @@ const ForestAnimation = () => (
  * This separation of concerns makes the code more modular and easier to maintain.
  */
 const LoginForm = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-
-    const validateEmail = (value: string): boolean => {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phonePattern = /^(?:\+?1[-. ]?)?(?:\(\d{3}\)|\d{3})[-. ]?\d{3}[-. ]?\d{4}$/;
-        const trimmedValue = value.trim();
-        
-        if (!emailPattern.test(trimmedValue) && !phonePattern.test(trimmedValue)) {
-            setEmailError('Please enter a valid email or phone number');
-            return false;
-        }
-        
-        setEmailError('');
-        return true;
-    };
-
-    const validatePassword = (value: string): boolean => {
-        const passwordPattern = /^(?=.*\d).{8,}$/; // At least 8 chars with a number
-        if (!passwordPattern.test(value)) {
-            setPasswordError('Password must be at least 8 characters long and include a number');
-            return false;
-        }
-        setPasswordError('');
-        return true;
-    };
-
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const isEmailValid = validateEmail(email);
-        const isPasswordValid = validatePassword(password);
-
-        if (isEmailValid && isPasswordValid) {
-            console.log('Form is valid, submitting...');
-            // Here you would typically handle the form submission, e.g., API call
-            // For example: (event.target as HTMLFormElement).submit();
-        }
-    };
-
     return (
         <div className="register-container">
             <h2>Welcome Back <br />To<br />Sustain Aim</h2>
-            <form id="registerForm" onSubmit={handleSubmit} method="get" noValidate>
-                <div className="form-group">
-                    <label htmlFor="email">Email or Mobile Phone Number</label>
-                    <input 
-                        type="text" 
-                        id="email" 
-                        name="email" 
-                        required 
-                        value={email}
-                        onChange={(e) => {
-                            setEmail(e.target.value);
-                            validateEmail(e.target.value);
-                        }}
-                        aria-invalid={!!emailError}
-                        aria-describedby="email-error"
-                    />
-                    <div id="email-error" className="error" role="alert" aria-live="polite">{emailError}</div>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        required 
-                        value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                            validatePassword(e.target.value);
-                        }}
-                        aria-invalid={!!passwordError}
-                        aria-describedby="password-error"
-                    />
-                    <div id="password-error" className="error" role="alert" aria-live="polite">{passwordError}</div>
-                </div>
-                <button type="submit">Sign In</button>
-            </form>
-            <div className="auth-links">
-                <Link href="/authentication/forgot-password">Forgot Password?</Link>
-                <Link href="/authentication/register">Sign Up</Link>
-            </div>
+            <AuthLogin 
+                subtext={
+                    <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+                        Sign in to continue to your dashboard
+                    </Typography>
+                }
+                subtitle={
+                    <div className="auth-links">
+                        <Link href="/authentication/register">Don't have an account? Sign Up</Link>
+                    </div>
+                }
+            />
         </div>
     );
 };

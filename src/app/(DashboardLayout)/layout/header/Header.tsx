@@ -1,20 +1,29 @@
-import { AppBar, Badge, Box, Button, IconButton, Stack, Toolbar, styled } from '@mui/material';
+import { AppBar, Badge, Box, Button, IconButton, Stack, Toolbar, Typography, styled } from '@mui/material';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import React from 'react';
 // components
-import { IconBellRinging, IconMenu } from '@tabler/icons-react';
+import { IconBellRinging, IconMenu, IconLogout } from '@tabler/icons-react';
 import Profile from './Profile';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ItemType {
   toggleMobileSidebar:  (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const Header = ({toggleMobileSidebar}: ItemType) => {
+  const { user, signOutUser } = useAuth();
 
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: 'none',
@@ -62,21 +71,40 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
         </IconButton>
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          <Button
-            variant="contained"
-            component={Link}
-            href="/authentication/login"
-            disableElevation
-            sx={{
-              backgroundColor: "#2c7873",
-              color: "#fff",
-              '&:hover': {
-                backgroundColor: "#256d63",
-              },
-            }}
-          >
-            Login
-          </Button>
+          {user ? (
+            <>
+              <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+                Welcome, {user.displayName || user.email}
+              </Typography>
+              <IconButton
+                onClick={handleSignOut}
+                color="inherit"
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                  },
+                }}
+              >
+                <IconLogout size="20" />
+              </IconButton>
+            </>
+          ) : (
+            <Button
+              variant="contained"
+              component={Link}
+              href="/authentication/login"
+              disableElevation
+              sx={{
+                backgroundColor: "#2c7873",
+                color: "#fff",
+                '&:hover': {
+                  backgroundColor: "#256d63",
+                },
+              }}
+            >
+              Login
+            </Button>
+          )}
           <Profile />
         </Stack>
       </ToolbarStyled>

@@ -1,12 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import React from 'react';
-import { Typography } from '@mui/material';
-import AuthRegister from '../auth/AuthRegister';
-import styles from './register.module.css';
-
-
+import { Box, Typography, Container } from '@mui/material';
+import AuthForgotPassword from '../auth/AuthForgotPassword';
+import styles from '../register/register.module.css';
 
 const ForestAnimation = () => (
     <div className={styles.forestContainer}>
@@ -67,17 +64,17 @@ const ForestAnimation = () => (
     </div>
 );
 
-const RegisterPage = () => {
+const ForgotPasswordPage = () => {
     return (
         <div className={styles.bodyWrapper}>
             <div className={styles.container}>
                 <ForestAnimation />
                 <div className={styles.registerContainer}>
-                    <h2 className={styles.title}>Create Account</h2>
-                    <AuthRegister 
+                    <AuthForgotPassword 
+                        title="Reset Password"
                         subtext={
                             <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-                                Join us in building a sustainable future
+                                Don't worry, it happens to the best of us
                             </Typography>
                         }
                     />
@@ -87,4 +84,6 @@ const RegisterPage = () => {
     );
 };
 
-export default RegisterPage;
+export default ForgotPasswordPage;
+
+

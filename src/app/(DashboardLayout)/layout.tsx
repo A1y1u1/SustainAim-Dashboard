@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/app/(DashboardLayout)/layout/header/Header";
 import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { Box, Container, styled } from "@mui/material";
 import React, { useState } from "react";
 
@@ -33,42 +34,45 @@ export default function RootLayout({
 }) {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
-      />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
+    <ProtectedRoute>
+      <MainWrapper className="mainwrapper">
         {/* ------------------------------------------- */}
-        {/* Header */}
+        {/* Sidebar */}
         {/* ------------------------------------------- */}
-        <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          isMobileSidebarOpen={isMobileSidebarOpen}
+          onSidebarClose={() => setMobileSidebarOpen(false)}
+        />
         {/* ------------------------------------------- */}
-        {/* PageContent */}
+        {/* Main Wrapper */}
         {/* ------------------------------------------- */}
-        <Container
-          sx={{
-            paddingTop: "20px",
-            maxWidth: "1200px",
-          }}
-        >
+        <PageWrapper className="page-wrapper">
           {/* ------------------------------------------- */}
-          {/* Page Route */}
+          {/* Header */}
           {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
+          <Header toggleMobileSidebar={() => setMobileSidebarOpen(true)} />
           {/* ------------------------------------------- */}
-          {/* End Page */}
+          {/* PageContent */}
           {/* ------------------------------------------- */}
-        </Container>
-      </PageWrapper>
-    </MainWrapper>
+          <Container
+            sx={{
+              paddingTop: "20px",
+              maxWidth: "1200px",
+            }}
+          >
+            {/* ------------------------------------------- */}
+            {/* Page Route */}
+            {/* ------------------------------------------- */}
+            <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>
+            {/* ------------------------------------------- */}
+            {/* End Page */}
+            {/* ------------------------------------------- */}
+          </Container>
+        </PageWrapper>
+      </MainWrapper>
+    </ProtectedRoute>
   );
 }
