@@ -63,12 +63,12 @@ const AuthForgotPassword = ({ title, subtitle, subtext }: AuthForgotPasswordProp
           </Alert>
           
           <Typography variant="body1" color="text.secondary" align="center" sx={{ mb: 2 }}>
-            We&apos;ve sent a password reset link to <strong>{email}</strong>
+            We've sent a password reset link to <strong>{email}</strong>
           </Typography>
           
           <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
             Please check your email and follow the instructions to reset your password.
-            If you don&apos;t see the email, check your spam folder.
+            If you don't see the email, check your spam folder.
           </Typography>
 
           <Box sx={{ textAlign: 'center' }}>
@@ -111,7 +111,7 @@ const AuthForgotPassword = ({ title, subtitle, subtext }: AuthForgotPasswordProp
 
       <Paper elevation={2} sx={{ p: 3 }}>
         <Typography variant="body1" color="text.secondary" align="center" sx={{ mb: 3 }}>
-          Enter your email address and we&apos;ll send you a link to reset your password.
+          Enter your email address and we'll send you a link to reset your password.
         </Typography>
 
         <form onSubmit={handleResetPassword}>
@@ -161,3 +161,5 @@ const AuthForgotPassword = ({ title, subtitle, subtext }: AuthForgotPasswordProp
 };
 
 export default AuthForgotPassword;
+
+
