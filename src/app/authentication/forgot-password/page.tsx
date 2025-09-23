@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { Box, Typography, Container } from '@mui/material';
+import { Typography } from '@mui/material';
 import AuthForgotPassword from '../auth/AuthForgotPassword';
 import styles from '../register/register.module.css';
 
@@ -74,7 +73,7 @@ const ForgotPasswordPage = () => {
                         title="Reset Password"
                         subtext={
                             <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
-                                Don't worry, it happens to the best of us
+                                Don&apos;t worry, it happens to the best of us
                             </Typography>
                         }
                     />
@@ -85,5 +84,3 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
-
-

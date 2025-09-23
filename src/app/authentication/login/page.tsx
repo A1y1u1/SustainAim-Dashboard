@@ -1,8 +1,7 @@
 "use client";
 
-import Link from 'next/link';
-import React from 'react';
 import { Typography } from '@mui/material';
+import Link from 'next/link';
 import AuthLogin from '../auth/AuthLogin';
 
 /**
@@ -84,7 +83,7 @@ const LoginForm = () => {
                 }
                 subtitle={
                     <div className="auth-links">
-                        <Link href="/authentication/register">Don't have an account? Sign Up</Link>
+                        <Link href="/authentication/register">Don&apos;t have an account? Sign Up</Link>
                     </div>
                 }
             />
