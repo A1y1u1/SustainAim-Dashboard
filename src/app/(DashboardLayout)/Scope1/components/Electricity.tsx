@@ -3,6 +3,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaBolt, FaDownload, FaEllipsisV, FaPlus, FaTimes } from "react-icons/fa";
 import * as XLSX from "xlsx";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
 
 // Define theme colors to avoid hardcoding
 const theme = {
@@ -12,7 +15,7 @@ const theme = {
 };
 
 interface EmissionData {
-  id: number;
+  id: string;
   year: number;
   month: string;
   category: string;
@@ -26,358 +29,7 @@ interface EmissionData {
   calculation: string;
 }
 
-const mockEmissionData: EmissionData[] = [
-  {
-    id: 1,
-    year: 2024,
-    month: "January",
-    category: "Electricity",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-001",
-    activityUnit: 1356.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 0.961,
-    calculation: "1356 × 0.709 ÷ 1000",
-  },
-  {
-    id: 2,
-    year: 2024,
-    month: "February",
-    category: "Electricity",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-002",
-    activityUnit: 1200.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 0.851,
-    calculation: "1200 × 0.709 ÷ 1000",
-  },
-  {
-    id: 3,
-    year: 2024,
-    month: "March",
-    category: "Electricity",
-    inputDate: "2024-03-15",
-    invoiceBill: "INV-2024-003",
-    activityUnit: 1450.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.028,
-    calculation: "1450 × 0.709 ÷ 1000",
-  },
-  {
-    id: 4,
-    year: 2024,
-    month: "April",
-    category: "Electricity",
-    inputDate: "2024-04-15",
-    invoiceBill: "INV-2024-004",
-    activityUnit: 1300.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 0.920,
-    calculation: "1300 × 0.709 ÷ 1000",
-  },
-  {
-    id: 5,
-    year: 2024,
-    month: "May",
-    category: "Electricity",
-    inputDate: "2024-05-15",
-    invoiceBill: "INV-2024-005",
-    activityUnit: 1400.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 0.993,
-    calculation: "1400 × 0.709 ÷ 1000",
-  },
-  {
-    id: 6,
-    year: 2024,
-    month: "June",
-    category: "Electricity",
-    inputDate: "2024-06-15",
-    invoiceBill: "INV-2024-006",
-    activityUnit: 1250.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 0.885,
-    calculation: "1250 × 0.709 ÷ 1000",
-  },
-  {
-    id: 7,
-    year: 2024,
-    month: "July",
-    category: "Electricity",
-    inputDate: "2024-07-15",
-    invoiceBill: "INV-2024-007",
-    activityUnit: 1500.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.064,
-    calculation: "1500 × 0.709 ÷ 1000",
-  },
-  {
-    id: 8,
-    year: 2024,
-    month: "August",
-    category: "Electricity",
-    inputDate: "2024-08-15",
-    invoiceBill: "INV-2024-008",
-    activityUnit: 1550.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.098,
-    calculation: "1550 × 0.709 ÷ 1000",
-  },
-  {
-    id: 9,
-    year: 2024,
-    month: "September",
-    category: "Electricity",
-    inputDate: "2024-09-15",
-    invoiceBill: "INV-2024-009",
-    activityUnit: 1600.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.135,
-    calculation: "1600 × 0.709 ÷ 1000",
-  },
-  {
-    id: 10,
-    year: 2024,
-    month: "October",
-    category: "Electricity",
-    inputDate: "2024-10-15",
-    invoiceBill: "INV-2024-010",
-    activityUnit: 1700.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.205,
-    calculation: "1700 × 0.709 ÷ 1000",
-  },
-  {
-    id: 11,
-    year: 2024,
-    month: "November",
-    category: "Electricity",
-    inputDate: "2024-11-15",
-    invoiceBill: "INV-2024-011",
-    activityUnit: 1800.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.275,
-    calculation: "1800 × 0.709 ÷ 1000",
-  },
-  {
-    id: 12,
-    year: 2024,
-    month: "December",
-    category: "Electricity",
-    inputDate: "2024-12-15",
-    invoiceBill: "INV-2024-012",
-    activityUnit: 1900.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.345,
-    calculation: "1900 × 0.709 ÷ 1000",
-  },
-  {
-    id: 13,
-    year: 2025,
-    month: "January",
-    category: "Electricity",
-    inputDate: "2025-01-15",
-    invoiceBill: "INV-2024-013",
-    activityUnit: 2000.0,
-    activityUnitType: "KWH",
-    emissionFactor: 0.709,
-    efSource: "EPA eGRID",
-    emissionTCO2e: 1.415,
-    calculation: "2000 × 0.709 ÷ 1000",
-  },
-  {
-    id: 14,
-    year: 2024,
-    month: "January",
-    category: "Fossil Fuel",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-014",
-    activityUnit: 500.0,
-    activityUnitType: "Liter",
-    emissionFactor: 2.5,
-    efSource: "IPCC Guidelines",
-    emissionTCO2e: 1.25,
-    calculation: "500 × 2.5 ÷ 1000",
-  },
-  {
-    id: 15,
-    year: 2024,
-    month: "February",
-    category: "Fossil Fuel",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-015",
-    activityUnit: 600.0,
-    activityUnitType: "Liter",
-    emissionFactor: 2.5,
-    efSource: "IPCC Guidelines",
-    emissionTCO2e: 1.5,
-    calculation: "600 × 2.5 ÷ 1000",
-  },
-  {
-    id: 16,
-    year: 2024,
-    month: "January",
-    category: "Travel",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-016",
-    activityUnit: 1000.0,
-    activityUnitType: "Kg",
-    emissionFactor: 0.12,
-    efSource: "DEFRA",
-    emissionTCO2e: 0.12,
-    calculation: "1000 × 0.12 ÷ 1000",
-  },
-  {
-    id: 17,
-    year: 2024,
-    month: "February",
-    category: "Travel",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-017",
-    activityUnit: 1200.0,
-    activityUnitType: "Kg",
-    emissionFactor: 0.12,
-    efSource: "DEFRA",
-    emissionTCO2e: 0.144,
-    calculation: "1200 × 0.12 ÷ 1000",
-  },
-  {
-    id: 18,
-    year: 2024,
-    month: "January",
-    category: "Transportation",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-018",
-    activityUnit: 800.0,
-    activityUnitType: "Kg",
-    emissionFactor: 0.15,
-    efSource: "EPA",
-    emissionTCO2e: 0.12,
-    calculation: "800 × 0.15 ÷ 1000",
-  },
-  {
-    id: 19,
-    year: 2024,
-    month: "February",
-    category: "Transportation",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-019",
-    activityUnit: 900.0,
-    activityUnitType: "Kg",
-    emissionFactor: 0.15,
-    efSource: "EPA",
-    emissionTCO2e: 0.135,
-    calculation: "900 × 0.15 ÷ 1000",
-  },
-  {
-    id: 20,
-    year: 2024,
-    month: "January",
-    category: "Waste",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-020",
-    activityUnit: 400.0,
-    activityUnitType: "Kg",
-    emissionFactor: 1.2,
-    efSource: "EPA WARM",
-    emissionTCO2e: 0.48,
-    calculation: "400 × 1.2 ÷ 1000",
-  },
-  {
-    id: 21,
-    year: 2024,
-    month: "February",
-    category: "Waste",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-021",
-    activityUnit: 450.0,
-    activityUnitType: "Kg",
-    emissionFactor: 1.2,
-    efSource: "EPA WARM",
-    emissionTCO2e: 0.54,
-    calculation: "450 × 1.2 ÷ 1000",
-  },
-  {
-    id: 22,
-    year: 2024,
-    month: "January",
-    category: "Fugitives",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-022",
-    activityUnit: 200.0,
-    activityUnitType: "Kg",
-    emissionFactor: 5.0,
-    efSource: "IPCC",
-    emissionTCO2e: 1.0,
-    calculation: "200 × 5.0 ÷ 1000",
-  },
-  {
-    id: 23,
-    year: 2024,
-    month: "February",
-    category: "Fugitives",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-023",
-    activityUnit: 250.0,
-    activityUnitType: "Kg",
-    emissionFactor: 5.0,
-    efSource: "IPCC",
-    emissionTCO2e: 1.25,
-    calculation: "250 × 5.0 ÷ 1000",
-  },
-  {
-    id: 24,
-    year: 2024,
-    month: "January",
-    category: "Goods & Services",
-    inputDate: "2024-01-15",
-    invoiceBill: "INV-2024-024",
-    activityUnit: 3000.0,
-    activityUnitType: "Kg",
-    emissionFactor: 0.05,
-    efSource: "DEFRA",
-    emissionTCO2e: 0.15,
-    calculation: "3000 × 0.05 ÷ 1000",
-  },
-  {
-    id: 25,
-    year: 2024,
-    month: "February",
-    category: "Goods & Services",
-    inputDate: "2024-02-15",
-    invoiceBill: "INV-2024-025",
-    activityUnit: 3500.0,
-    activityUnitType: "Kg",
-    emissionFactor: 0.05,
-    efSource: "DEFRA",
-    emissionTCO2e: 0.175,
-    calculation: "3500 × 0.05 ÷ 1000",
-  },
-];
+// Firestore provides data; mock removed
 
 interface ElectricityProps {
   category?: string; // Optional category prop, defaults to "all"
@@ -438,10 +90,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
 };
 
 interface DropdownMenuProps {
-  recordId: number;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
-  onViewDetails: (id: number) => void;
+  recordId: string;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onViewDetails: (id: string) => void;
   onClose: () => void;
   isOpen: boolean;
 }
@@ -508,13 +160,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ recordId, onEdit, onDelete,
 
 const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<EmissionData | null>(null);
-  const [data, setData] = useState<EmissionData[]>([...mockEmissionData].reverse());
+  const [data, setData] = useState<EmissionData[]>([]);
   const [formData, setFormData] = useState({
     category: category === "all" ? "Electricity" : category,
     year: new Date().getFullYear(),
@@ -527,6 +179,36 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     efSource: "EPA eGRID",
   });
   const itemsPerPage = 12;
+  const { user } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      setData([]);
+      return;
+    }
+    const colRef = collection(db, "users", user.uid, "scope1");
+    const q = query(colRef, orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const items: EmissionData[] = snapshot.docs.map((docSnap) => {
+        const d: any = docSnap.data();
+        return {
+          id: docSnap.id,
+          year: Number(d.year) || new Date().getFullYear(),
+          month: d.month || new Date().toLocaleString("default", { month: "long" }),
+          category: d.category || "Electricity",
+          inputDate: d.inputDate || new Date().toISOString().split("T")[0],
+          invoiceBill: d.invoiceBill || "",
+          activityUnit: Number(d.activityUnit) || 0,
+          activityUnitType: d.activityUnitType || "KWH",
+          emissionFactor: Number(d.emissionFactor) || 0,
+          efSource: d.efSource || "",
+          emissionTCO2e: Number(d.emissionTCO2e) || 0,
+          calculation: d.calculation || "",
+        };
+      });
+      setData(items);
+    });
+    return () => unsubscribe();
+  }, [user]);
 
   // Filter data based on category prop
   const filteredData = category === "all" ? data : data.filter((record) => record.category === category);
@@ -549,7 +231,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     setOpenMenuId(null);
   };
 
-  const toggleMenu = (recordId: number) => {
+  const toggleMenu = (recordId: string) => {
     setOpenMenuId(openMenuId === recordId ? null : recordId);
   };
 
@@ -572,10 +254,10 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     }));
   };
 
-  const handleAddData = () => {
+  const handleAddData = async () => {
+    if (!user) return;
     const emissionTCO2e = (formData.activityUnit * formData.emissionFactor) / 1000;
-    const newRecord: EmissionData = {
-      id: data.length + 1,
+    await addDoc(collection(db, "users", user.uid, "scope1"), {
       category: formData.category,
       year: formData.year,
       month: formData.month,
@@ -587,8 +269,8 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
       efSource: formData.efSource,
       emissionTCO2e,
       calculation: `${formData.activityUnit} × ${formData.emissionFactor} ÷ 1000`,
-    };
-    setData([newRecord, ...data]);
+      createdAt: serverTimestamp(),
+    });
     setIsAddModalOpen(false);
     setFormData({
       category: category === "all" ? "Electricity" : category,
@@ -604,47 +286,45 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     setCurrentPage(1);
   };
 
-  const handleEditData = () => {
-    if (selectedRecord) {
-      const emissionTCO2e = (formData.activityUnit * formData.emissionFactor) / 1000;
-      const updatedRecord: EmissionData = {
-        ...selectedRecord,
-        category: formData.category,
-        year: formData.year,
-        month: formData.month,
-        inputDate: formData.inputDate,
-        invoiceBill: formData.invoiceBill,
-        activityUnit: formData.activityUnit,
-        activityUnitType: formData.activityUnitType,
-        emissionFactor: formData.emissionFactor,
-        efSource: formData.efSource,
-        emissionTCO2e,
-        calculation: `${formData.activityUnit} × ${formData.emissionFactor} ÷ 1000`,
-      };
-      setData(data.map((record) => (record.id === selectedRecord.id ? updatedRecord : record)));
-      setIsEditModalOpen(false);
-      setSelectedRecord(null);
-      setFormData({
-        category: category === "all" ? "Electricity" : category,
-        year: new Date().getFullYear(),
-        month: new Date().toLocaleString("default", { month: "long" }),
-        inputDate: new Date().toISOString().split("T")[0],
-        invoiceBill: "",
-        activityUnit: 0,
-        activityUnitType: "KWH",
-        emissionFactor: 0.709,
-        efSource: "EPA eGRID",
-      });
-    }
+  const handleEditData = async () => {
+    if (!user || !selectedRecord) return;
+    const emissionTCO2e = (formData.activityUnit * formData.emissionFactor) / 1000;
+    await updateDoc(doc(db, "users", user.uid, "scope1", selectedRecord.id), {
+      category: formData.category,
+      year: formData.year,
+      month: formData.month,
+      inputDate: formData.inputDate,
+      invoiceBill: formData.invoiceBill,
+      activityUnit: formData.activityUnit,
+      activityUnitType: formData.activityUnitType,
+      emissionFactor: formData.emissionFactor,
+      efSource: formData.efSource,
+      emissionTCO2e,
+      calculation: `${formData.activityUnit} × ${formData.emissionFactor} ÷ 1000`,
+    });
+    setIsEditModalOpen(false);
+    setSelectedRecord(null);
+    setFormData({
+      category: category === "all" ? "Electricity" : category,
+      year: new Date().getFullYear(),
+      month: new Date().toLocaleString("default", { month: "long" }),
+      inputDate: new Date().toISOString().split("T")[0],
+      invoiceBill: "",
+      activityUnit: 0,
+      activityUnitType: "KWH",
+      emissionFactor: 0.709,
+      efSource: "EPA eGRID",
+    });
   };
 
-  const handleDeleteData = (id: number) => {
-    setData(data.filter((record) => record.id !== id));
+  const handleDeleteData = async (id: string) => {
+    if (!user) return;
+    await deleteDoc(doc(db, "users", user.uid, "scope1", id));
     setIsDeleteModalOpen(false);
     setSelectedRecord(null);
   };
 
-  const handleEditClick = (id: number) => {
+  const handleEditClick = (id: string) => {
     const record = data.find((r) => r.id === id);
     if (record) {
       setSelectedRecord(record);
@@ -663,7 +343,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     }
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     const record = data.find((r) => r.id === id);
     if (record) {
       setSelectedRecord(record);
@@ -671,7 +351,7 @@ const Electricity: React.FC<ElectricityProps> = ({ category = "all" }) => {
     }
   };
 
-  const handleViewDetailsClick = (id: number) => {
+  const handleViewDetailsClick = (id: string) => {
     const record = data.find((r) => r.id === id);
     if (record) {
       setSelectedRecord(record);
