@@ -1,12 +1,11 @@
-import { EB_Garamond } from 'next/font/google';
+"use client";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { baselightTheme } from "@/utils/theme/DefaultColors";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import './global.css';
-import Providers from './providers';
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap" rel="stylesheet"></link>
 
-const ebGaramond = EB_Garamond({
-  weight: ['600'],
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export default function RootLayout({
   children,
@@ -14,9 +13,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={ebGaramond.className}>
-        <Providers>{children}</Providers>
+    <html lang="en">
+      <body>
+        <AuthProvider>
+          <ThemeProvider theme={baselightTheme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
