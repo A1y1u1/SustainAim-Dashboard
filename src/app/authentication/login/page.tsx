@@ -83,7 +83,7 @@ const LoginForm = () => {
                 }
                 subtitle={
                     <div className="auth-links">
-                        <Link href="/authentication/register">Don't have an account? Sign Up</Link>
+                        <Link href="/authentication/register">Don&apos;t have an account? Sign Up</Link>
                     </div>
                 }
             />
